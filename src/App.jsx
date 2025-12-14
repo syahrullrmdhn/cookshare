@@ -3,7 +3,7 @@ import {
   ChefHat, 
   Home, 
   Search, 
-  PlusSquare, 
+  Plus, 
   User, 
   Heart, 
   MessageCircle, 
@@ -22,9 +22,9 @@ import {
   Award,
   Camera,
   X,
-  Trash2
+  Trash2,
+  BookOpen
 } from 'lucide-react';
-
 
 // --- 1. MOCK DATA ---
 
@@ -66,7 +66,7 @@ const MOCK_RECIPES = [
     title: "Creamy Mushroom Pasta",
     chef: "Siska Kohl KW",
     chefLevel: "Pemula Manis",
-    image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?lib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
     time: "30 mnt",
     difficulty: "Sedang",
     calories: "450 kkal",
@@ -119,10 +119,10 @@ const BADGES = [
 const Button = ({ children, variant = 'primary', className = '', onClick, type = 'button' }) => {
   const baseStyle = "w-full py-3 rounded-xl font-medium transition-all duration-200 active:scale-95 flex items-center justify-center gap-2";
   const variants = {
-    primary: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md shadow-emerald-200",
-    outline: "border-2 border-slate-200 text-slate-700 hover:border-emerald-600 hover:text-emerald-600 bg-transparent",
+    primary: "bg-emerald-500 text-white hover:bg-emerald-600 shadow-lg shadow-emerald-200",
+    outline: "border-2 border-slate-200 text-slate-700 hover:border-emerald-500 hover:text-emerald-500 bg-transparent",
     ghost: "bg-slate-100 text-slate-600 hover:bg-slate-200",
-    text: "bg-transparent text-slate-500 hover:text-emerald-600"
+    text: "bg-transparent text-slate-500 hover:text-emerald-500"
   };
   return (
     <button type={type} onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`}>
@@ -142,29 +142,66 @@ const Input = ({ label, type = "text", placeholder }) => (
   </div>
 );
 
+// --- MODIFIED BOTTOM NAV ---
 const BottomNav = ({ currentTab, setTab }) => {
-  const tabs = [
-    { id: 'home', icon: <Home size={22} />, label: 'Home' },
-    { id: 'explore', icon: <Search size={22} />, label: 'Cari' },
-    { id: 'create', icon: <PlusSquare size={22} />, label: 'Buat' },
-    { id: 'shopping', icon: <ShoppingBag size={22} />, label: 'Belanja' },
-    { id: 'profile', icon: <User size={22} />, label: 'Profil' },
-  ];
-
   return (
-    <div className="fixed bottom-0 w-full max-w-md bg-white border-t border-slate-100 px-2 py-3 flex justify-around items-center z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
-      {tabs.map((tab) => (
+    <div className="fixed bottom-0 w-full max-w-md bg-white/95 backdrop-blur-sm border-t border-slate-100 pb-2 pt-2 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.03)] rounded-t-3xl">
+      <div className="flex justify-between items-end px-6 relative">
+        
+        {/* Kiri */}
         <button
-          key={tab.id}
-          onClick={() => setTab(tab.id)}
-          className={`flex flex-col items-center gap-1 p-2 transition-colors duration-200 rounded-xl ${
-            currentTab === tab.id ? 'text-emerald-600 bg-emerald-50' : 'text-slate-400 hover:text-slate-600'
+          onClick={() => setTab('home')}
+          className={`flex flex-col items-center gap-1 p-2 transition-all duration-300 ${
+            currentTab === 'home' ? 'text-emerald-600 -translate-y-1' : 'text-slate-300 hover:text-slate-500'
           }`}
         >
-          {tab.icon}
-          <span className="text-[10px] font-medium">{tab.label}</span>
+          <Home size={24} strokeWidth={currentTab === 'home' ? 2.5 : 2} />
+          <span className={`text-[10px] font-medium transition-opacity ${currentTab === 'home' ? 'opacity-100' : 'opacity-0 hidden'}`}>Beranda</span>
         </button>
-      ))}
+
+        <button
+          onClick={() => setTab('explore')}
+          className={`flex flex-col items-center gap-1 p-2 transition-all duration-300 ${
+            currentTab === 'explore' ? 'text-emerald-600 -translate-y-1' : 'text-slate-300 hover:text-slate-500'
+          }`}
+        >
+          <Search size={24} strokeWidth={currentTab === 'explore' ? 2.5 : 2} />
+          <span className={`text-[10px] font-medium transition-opacity ${currentTab === 'explore' ? 'opacity-100' : 'opacity-0 hidden'}`}>Cari</span>
+        </button>
+
+        {/* Tengah - Floating Button */}
+        <div className="relative -top-6 group">
+          <div className="absolute inset-0 bg-emerald-400 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity duration-300"></div>
+          <button
+            onClick={() => setTab('create')}
+            className="relative w-14 h-14 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-200/50 border-4 border-white transform transition-all duration-300 active:scale-95 hover:-translate-y-1"
+          >
+            <Plus size={28} strokeWidth={3} />
+          </button>
+        </div>
+
+        {/* Kanan */}
+        <button
+          onClick={() => setTab('shopping')}
+          className={`flex flex-col items-center gap-1 p-2 transition-all duration-300 ${
+            currentTab === 'shopping' ? 'text-emerald-600 -translate-y-1' : 'text-slate-300 hover:text-slate-500'
+          }`}
+        >
+          <ShoppingBag size={24} strokeWidth={currentTab === 'shopping' ? 2.5 : 2} />
+          <span className={`text-[10px] font-medium transition-opacity ${currentTab === 'shopping' ? 'opacity-100' : 'opacity-0 hidden'}`}>Belanja</span>
+        </button>
+
+        <button
+          onClick={() => setTab('profile')}
+          className={`flex flex-col items-center gap-1 p-2 transition-all duration-300 ${
+            currentTab === 'profile' ? 'text-emerald-600 -translate-y-1' : 'text-slate-300 hover:text-slate-500'
+          }`}
+        >
+          <User size={24} strokeWidth={currentTab === 'profile' ? 2.5 : 2} />
+          <span className={`text-[10px] font-medium transition-opacity ${currentTab === 'profile' ? 'opacity-100' : 'opacity-0 hidden'}`}>Profil</span>
+        </button>
+        
+      </div>
     </div>
   );
 };
@@ -210,7 +247,6 @@ const RecipeCard = ({ recipe, onClick }) => (
 
 const Onboarding = ({ onFinish }) => (
   <div className="flex flex-col h-full bg-white relative overflow-hidden">
-    {/* Dekorasi Background */}
     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full translate-x-1/3 -translate-y-1/3 blur-3xl" />
     <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-50 rounded-full -translate-x-1/3 translate-y-1/3 blur-3xl" />
 
@@ -278,15 +314,24 @@ const Preferences = ({ onFinish }) => {
 };
 
 const Feed = ({ onRecipeClick }) => (
-  <div className="pb-24 pt-4 px-4">
+  <div className="pb-28 pt-6 px-4">
+    {/* Header Clean */}
     <div className="flex justify-between items-center mb-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-800">Halo, Chef! 👋</h1>
         <p className="text-slate-500 text-sm">Mau masak apa hari ini?</p>
       </div>
-      <div className="w-10 h-10 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
+      <div className="w-10 h-10 bg-slate-100 rounded-full overflow-hidden border border-slate-200 shadow-sm">
          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="avatar" />
       </div>
+    </div>
+    
+    <div className="flex gap-2 overflow-x-auto scrollbar-hide mb-6 pb-2">
+       {["Semua", "Sarapan", "Makan Siang", "Makan Malam", "MPASI", "Snack"].map((tag, i) => (
+         <button key={i} className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap ${i === 0 ? 'bg-slate-800 text-white' : 'bg-white border border-slate-200 text-slate-600'}`}>
+           {tag}
+         </button>
+       ))}
     </div>
 
     {/* Dish of the Day */}
@@ -316,91 +361,37 @@ const Feed = ({ onRecipeClick }) => (
 );
 
 const Explore = () => (
-  <div className="pb-24 pt-6 px-4">
+  <div className="pb-28 pt-6 px-4">
     <div className="relative mb-6">
       <Search className="absolute left-4 top-3.5 text-slate-400" size={20} />
       <input 
         type="text" 
         placeholder="Cari resep, bahan, atau chef..." 
-        className="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 outline-none transition-all"
+        className="w-full pl-12 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-emerald-500 outline-none transition-all shadow-sm"
       />
     </div>
 
-    {/* Weekly Challenge Banner */}
-    <div className="bg-gradient-to-r from-emerald-600 to-teal-500 rounded-2xl p-5 text-white mb-8 shadow-lg shadow-emerald-200 relative overflow-hidden">
-      <div className="relative z-10">
-        <div className="flex items-center gap-2 mb-2 bg-white/20 w-fit px-2 py-1 rounded-lg backdrop-blur-sm">
-          <Award size={14} className="text-yellow-300" />
-          <span className="text-xs font-bold">Tantangan Minggu Ini</span>
-        </div>
-        <h3 className="text-xl font-bold mb-1">Kreasi Olahan Ayam</h3>
-        <p className="text-emerald-100 text-sm mb-4">Menangkan badge eksklusif!</p>
-        <button className="bg-white text-emerald-600 px-4 py-2 rounded-lg text-xs font-bold shadow-sm active:scale-95 transition-transform">
-          Ikut Tantangan
-        </button>
-      </div>
-      <Flame size={100} className="text-white/10 absolute -right-4 -bottom-4 rotate-12" />
-    </div>
-
-    <h3 className="font-bold text-slate-800 mb-3">Kategori Populer</h3>
-    <div className="flex flex-wrap gap-2">
-      {["Nusantara", "Sarapan", "Diet", "Dessert", "Ayam", "Minuman", "Korea", "Snack"].map((cat, idx) => (
+    <h3 className="font-bold text-slate-800 mb-4">Kategori Populer</h3>
+    <div className="flex flex-wrap gap-2 mb-8">
+      {["Nusantara", "Sarapan", "Diet", "Dessert", "Ayam", "Minuman", "Korea", "Snack", "Seafood", "Sayuran", "Baking"].map((cat, idx) => (
         <div key={idx} className="px-4 py-2 bg-white border border-slate-100 rounded-lg text-sm text-slate-600 font-medium shadow-sm hover:border-emerald-500 hover:text-emerald-600 transition-colors cursor-pointer">
           {cat}
         </div>
       ))}
     </div>
-  </div>
-);
 
-const CreateRecipe = () => (
-  <div className="pb-24 pt-6 px-4">
-    <h2 className="text-2xl font-bold text-slate-800 mb-6">Bagikan Resep</h2>
-    
-    <div className="w-full h-48 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-slate-400 mb-6 cursor-pointer hover:bg-slate-100 transition-colors">
-      <Camera size={32} className="mb-2" />
-      <span className="text-sm font-medium">Unggah Foto Masakan</span>
+    <h3 className="font-bold text-slate-800 mb-4">Pencarian Terkini</h3>
+    <div className="space-y-3">
+       {["Resep Ayam Kecap", "Cara membuat donat", "Soto Betawi"].map((item, idx) => (
+         <div key={idx} className="flex items-center justify-between text-slate-600 text-sm">
+            <div className="flex items-center gap-3">
+               <Clock size={16} className="text-slate-300" />
+               <span>{item}</span>
+            </div>
+            <X size={16} className="text-slate-300 cursor-pointer" />
+         </div>
+       ))}
     </div>
-
-    <form className="space-y-2">
-      <Input label="Judul Resep" placeholder="Contoh: Rendang Daging Sapi" />
-      <div className="grid grid-cols-2 gap-4">
-         <Input label="Waktu (menit)" placeholder="60" type="number" />
-         <Input label="Porsi" placeholder="4 porsi" />
-      </div>
-      
-      <div className="mt-4">
-        <label className="block text-sm font-medium text-slate-700 mb-2">Bahan-bahan</label>
-        <div className="space-y-2">
-          <input className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none" placeholder="Contoh: 500gr Daging Sapi" />
-          <input className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none" placeholder="Contoh: 1 liter santan" />
-          <button type="button" className="text-emerald-600 text-sm font-medium mt-1 flex items-center gap-1 hover:text-emerald-700">
-            <PlusSquare size={14} /> Tambah Bahan
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <label className="block text-sm font-medium text-slate-700 mb-2">Cara Membuat (Langkah-langkah)</label>
-        <div className="space-y-3">
-          <div className="flex gap-3">
-             <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0 mt-2">1</div>
-             <textarea className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none resize-none" rows="2" placeholder="Contoh: Potong daging sapi tipis-tipis..." />
-          </div>
-          <div className="flex gap-3">
-             <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0 mt-2">2</div>
-             <textarea className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none resize-none" rows="2" placeholder="Contoh: Tumis bumbu halus hingga harum..." />
-          </div>
-          <button type="button" className="text-emerald-600 text-sm font-medium mt-1 flex items-center gap-1 hover:text-emerald-700 ml-9">
-            <PlusSquare size={14} /> Tambah Langkah
-          </button>
-        </div>
-      </div>
-
-      <div className="pt-6">
-        <Button>Publikasikan Resep</Button>
-      </div>
-    </form>
   </div>
 );
 
@@ -423,117 +414,251 @@ const ShoppingList = () => {
   const progress = Math.round((items.filter(i => i.checked).length / items.length) * 100) || 0;
 
   return (
-    <div className="pb-24 pt-6 px-4">
+    <div className="pb-28 pt-6 px-4">
       <h2 className="text-2xl font-bold text-slate-800 mb-6">Daftar Belanja</h2>
       
       {/* Progress Card */}
-      <div className="bg-emerald-600 rounded-2xl p-5 text-white mb-8 shadow-lg shadow-emerald-200">
-        <div className="flex justify-between items-end mb-2">
-           <div>
-             <div className="text-emerald-100 text-xs font-medium mb-1">Progress Belanja</div>
-             <div className="text-2xl font-bold">{items.filter(i => i.checked).length}/{items.length} Item</div>
-           </div>
-           <div className="text-3xl font-bold opacity-20">{progress}%</div>
+      <div className="bg-gradient-to-r from-emerald-600 to-teal-500 rounded-2xl p-5 text-white mb-8 shadow-lg shadow-emerald-200 relative overflow-hidden">
+        <div className="relative z-10">
+          <div className="flex justify-between items-end mb-3">
+             <div>
+               <div className="text-emerald-100 text-xs font-bold uppercase tracking-wider mb-1">Progress</div>
+               <div className="text-3xl font-bold">{items.filter(i => i.checked).length}<span className="text-lg opacity-60">/{items.length}</span></div>
+             </div>
+             <div className="bg-white/20 px-3 py-1 rounded-lg backdrop-blur-sm">
+                <span className="text-sm font-bold">{progress}% Selesai</span>
+             </div>
+          </div>
+          <div className="w-full bg-black/20 rounded-full h-2.5">
+             <div className="bg-white rounded-full h-2.5 transition-all duration-500 ease-out shadow-sm" style={{ width: `${progress}%` }}></div>
+          </div>
         </div>
-        <div className="w-full bg-black/20 rounded-full h-2">
-           <div className="bg-white rounded-full h-2 transition-all duration-500" style={{ width: `${progress}%` }}></div>
-        </div>
+        <ShoppingBag className="absolute -right-4 -bottom-4 text-white/10 w-32 h-32 rotate-12" />
       </div>
 
       <div className="space-y-3">
         {items.map((item) => (
           <div 
             key={item.id} 
-            className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
-              item.checked ? 'bg-slate-50 border-slate-100' : 'bg-white border-slate-100 shadow-sm'
+            className={`flex items-start gap-4 p-4 rounded-xl border transition-all duration-200 group ${
+              item.checked 
+                ? 'bg-slate-50 border-slate-100' 
+                : 'bg-white border-slate-100 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-emerald-200 hover:shadow-md'
             }`}
           >
             <div 
               onClick={() => toggleItem(item.id)}
-              className={`mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center transition-colors shrink-0 cursor-pointer ${
-              item.checked ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300'
+              className={`mt-0.5 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all cursor-pointer ${
+              item.checked 
+                ? 'bg-emerald-500 border-emerald-500 text-white scale-95' 
+                : 'border-slate-300 hover:border-emerald-400'
             }`}>
-              {item.checked && <CheckCircle size={14} />}
+              {item.checked && <CheckCircle size={16} strokeWidth={3} />}
             </div>
             
             <div className="flex-1 cursor-pointer" onClick={() => toggleItem(item.id)}>
-              <div className={`text-sm font-medium transition-all ${item.checked ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+              <div className={`text-base font-medium transition-all ${item.checked ? 'text-slate-400 line-through decoration-slate-300' : 'text-slate-800'}`}>
                 {item.name}
               </div>
-              <div className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-                <Bookmark size={10} /> {item.recipe}
+              <div className="text-xs text-slate-400 mt-1.5 flex items-center gap-1.5">
+                <div className={`w-1.5 h-1.5 rounded-full ${item.checked ? 'bg-slate-300' : 'bg-emerald-400'}`}></div>
+                <span className="font-medium">{item.recipe}</span>
               </div>
             </div>
 
-            <button onClick={() => deleteItem(item.id)} className="text-slate-300 hover:text-red-500 transition-colors p-1">
-              <Trash2 size={16} />
+            <button onClick={() => deleteItem(item.id)} className="text-slate-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+              <Trash2 size={18} />
             </button>
           </div>
         ))}
 
         {items.length === 0 && (
-          <div className="text-center py-12 text-slate-400">
-            <ShoppingBag size={48} className="mx-auto mb-4 opacity-20" />
-            <p className="text-sm">Daftar belanja kosong.</p>
+          <div className="text-center py-16 text-slate-400 flex flex-col items-center">
+            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+               <ShoppingBag size={32} className="opacity-40" />
+            </div>
+            <p className="text-slate-600 font-medium">Keranjang belanja kosong</p>
+            <p className="text-xs mt-1">Tambahkan bahan dari resep favoritmu!</p>
           </div>
         )}
       </div>
+      
+      {items.length > 0 && (
+         <div className="mt-8 text-center">
+            <button className="text-xs text-slate-400 hover:text-red-500 font-medium transition-colors">Hapus semua item yang dicentang</button>
+         </div>
+      )}
     </div>
   );
 };
 
-const Profile = () => (
-  <div className="pb-24">
-    <div className="pt-8 px-6 pb-6 bg-white border-b border-slate-50">
-      <div className="flex justify-between items-start mb-4">
-        <div className="w-20 h-20 bg-slate-200 rounded-full overflow-hidden border-2 border-white shadow-md">
-          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
-        </div>
-        <button className="text-slate-400 p-2 hover:bg-slate-50 rounded-full"><Settings size={20} /></button>
-      </div>
-      
-      <h2 className="text-2xl font-bold text-slate-800">Dimas Anggara</h2>
-      <p className="text-slate-500 text-sm mb-3">Hobi masak di akhir pekan. Suka pedas!</p>
-      
-      <div className="flex gap-2 mb-6">
-        {BADGES.map(badge => (
-          <div key={badge.id} className={`px-2 py-1 rounded-md text-[10px] font-bold flex items-center gap-1 ${badge.color}`}>
-            {badge.icon} {badge.name}
-          </div>
-        ))}
-      </div>
-
-      <div className="flex gap-8 text-center bg-slate-50 p-4 rounded-xl">
-        <div><div className="font-bold text-slate-800 text-lg">12</div><div className="text-xs text-slate-400">Resep</div></div>
-        <div className="w-px bg-slate-200"></div>
-        <div><div className="font-bold text-slate-800 text-lg">2.4k</div><div className="text-xs text-slate-400">Pengikut</div></div>
-        <div className="w-px bg-slate-200"></div>
-        <div><div className="font-bold text-slate-800 text-lg">145</div><div className="text-xs text-slate-400">Mengikuti</div></div>
-      </div>
+const CreateRecipe = () => (
+  <div className="pb-28 pt-6 px-4">
+    <h2 className="text-2xl font-bold text-slate-800 mb-6">Bagikan Resep</h2>
+    
+    <div className="w-full h-48 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-col items-center justify-center text-slate-400 mb-6 cursor-pointer hover:bg-slate-100 transition-colors">
+      <Camera size={32} className="mb-2" />
+      <span className="text-sm font-medium">Unggah Foto Masakan</span>
     </div>
 
-    {/* Profile Content */}
-    <div className="px-4 mt-6">
-      <h3 className="font-bold text-slate-800 mb-4">Resep Saya</h3>
+    <form className="space-y-2">
+      <Input label="Judul Resep" placeholder="Contoh: Rendang Daging Sapi" />
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden cursor-pointer">
-           <div className="h-32 bg-slate-200">
-             <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover" />
-           </div>
-           <div className="p-3">
-             <h4 className="font-bold text-sm text-slate-800 line-clamp-1">Salad Buah Segar</h4>
-             <span className="text-xs text-slate-400">12 menit yang lalu</span>
-           </div>
-        </div>
-        {/* Empty State */}
-        <div className="bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 h-full min-h-[160px] cursor-pointer hover:bg-slate-100 transition-colors">
-          <PlusSquare size={24} className="mb-1"/>
-          <span className="text-xs font-medium">Buat Baru</span>
+         <Input label="Waktu (menit)" placeholder="60" type="number" />
+         <Input label="Porsi" placeholder="4 porsi" />
+      </div>
+      
+      <div className="mt-4">
+        <label className="block text-sm font-medium text-slate-700 mb-2">Bahan-bahan</label>
+        <div className="space-y-2">
+          <input className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none" placeholder="Contoh: 500gr Daging Sapi" />
+          <input className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none" placeholder="Contoh: 1 liter santan" />
+          <button type="button" className="text-emerald-600 text-sm font-medium mt-1 flex items-center gap-1 hover:text-emerald-700">
+            <Plus size={14} /> Tambah Bahan
+          </button>
         </div>
       </div>
-    </div>
+
+      <div className="mt-6">
+        <label className="block text-sm font-medium text-slate-700 mb-2">Cara Membuat (Langkah-langkah)</label>
+        <div className="space-y-3">
+          <div className="flex gap-3">
+             <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0 mt-2">1</div>
+             <textarea className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none resize-none" rows="2" placeholder="Contoh: Potong daging sapi tipis-tipis..." />
+          </div>
+          <div className="flex gap-3">
+             <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 shrink-0 mt-2">2</div>
+             <textarea className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none text-sm focus:ring-2 focus:ring-emerald-100 outline-none resize-none" rows="2" placeholder="Contoh: Tumis bumbu halus hingga harum..." />
+          </div>
+          <button type="button" className="text-emerald-600 text-sm font-medium mt-1 flex items-center gap-1 hover:text-emerald-700 ml-9">
+            <Plus size={14} /> Tambah Langkah
+          </button>
+        </div>
+      </div>
+
+      <div className="pt-6">
+        <Button>Publikasikan Resep</Button>
+      </div>
+    </form>
   </div>
 );
+
+const Profile = () => {
+  const [activeTab, setActiveTab] = useState('recipes'); // recipes, saved
+
+  return (
+    <div className="pb-28 bg-white min-h-screen">
+      {/* Cover Image */}
+      <div className="h-32 bg-gradient-to-r from-emerald-400 to-teal-500 relative">
+        <div className="absolute top-4 right-4 text-white/80 cursor-pointer hover:text-white">
+           <Settings size={20} />
+        </div>
+      </div>
+
+      {/* Profile Header */}
+      <div className="px-6 relative">
+        <div className="flex justify-between items-end -mt-10 mb-4">
+          <div className="w-24 h-24 bg-white rounded-full p-1 shadow-lg">
+            <div className="w-full h-full bg-slate-200 rounded-full overflow-hidden">
+               <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" className="w-full h-full object-cover"/>
+            </div>
+          </div>
+          <button className="bg-emerald-600 text-white px-6 py-2 rounded-full text-xs font-bold shadow-md shadow-emerald-200 active:scale-95 transition-transform mb-2">
+            Edit Profil
+          </button>
+        </div>
+        
+        <h2 className="text-2xl font-bold text-slate-800">Dimas Anggara</h2>
+        <p className="text-slate-500 text-sm mb-3 leading-relaxed">Hobi masak di akhir pekan. Pecinta pedas & eksperimen rasa baru. 🌶️✨</p>
+        
+        <div className="flex gap-2 mb-6 flex-wrap">
+          {BADGES.map(badge => (
+            <div key={badge.id} className={`px-3 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 ${badge.color} border border-white shadow-sm`}>
+              {badge.icon} {badge.name}
+            </div>
+          ))}
+        </div>
+
+        {/* Stats Row */}
+        <div className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl mb-8 border border-slate-100">
+          <div className="text-center flex-1">
+            <div className="font-bold text-slate-800 text-lg">12</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Resep</div>
+          </div>
+          <div className="w-px h-8 bg-slate-200"></div>
+          <div className="text-center flex-1">
+            <div className="font-bold text-slate-800 text-lg">2.4k</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Pengikut</div>
+          </div>
+          <div className="w-px h-8 bg-slate-200"></div>
+          <div className="text-center flex-1">
+            <div className="font-bold text-slate-800 text-lg">145</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Mengikuti</div>
+          </div>
+        </div>
+
+        {/* Profile Tabs */}
+        <div className="flex border-b border-slate-100 mb-6">
+          <button 
+            onClick={() => setActiveTab('recipes')} 
+            className={`flex-1 pb-3 text-sm font-bold transition-all ${activeTab === 'recipes' ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            Resep Saya
+          </button>
+          <button 
+            onClick={() => setActiveTab('saved')} 
+            className={`flex-1 pb-3 text-sm font-bold transition-all ${activeTab === 'saved' ? 'text-emerald-600 border-b-2 border-emerald-600' : 'text-slate-400 hover:text-slate-600'}`}
+          >
+            Disimpan
+          </button>
+        </div>
+
+        {/* Content Grid */}
+        <div className="grid grid-cols-2 gap-4 pb-6 animate-in slide-in-from-bottom-4 duration-500">
+          {activeTab === 'recipes' ? (
+            <>
+              {/* Existing Card with Aesthetic Touch */}
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden group cursor-pointer relative">
+                 <div className="h-40 overflow-hidden">
+                   <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                 </div>
+                 <div className="p-3 absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent pt-8">
+                   <h4 className="font-bold text-sm text-white line-clamp-1">Salad Buah Segar</h4>
+                   <span className="text-[10px] text-slate-200">12 menit lalu</span>
+                 </div>
+              </div>
+              
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden group cursor-pointer relative">
+                 <div className="h-40 overflow-hidden">
+                   <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                 </div>
+                 <div className="p-3 absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 to-transparent pt-8">
+                   <h4 className="font-bold text-sm text-white line-clamp-1">Pizza Homemade</h4>
+                   <span className="text-[10px] text-slate-200">2 hari lalu</span>
+                 </div>
+              </div>
+
+              {/* Add New Button */}
+              <div className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 h-40 cursor-pointer hover:bg-slate-100 transition-colors">
+                <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm mb-2">
+                  <Plus size={20} className="text-emerald-500" />
+                </div>
+                <span className="text-xs font-medium">Buat Resep</span>
+              </div>
+            </>
+          ) : (
+             <div className="col-span-2 text-center py-10">
+               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                 <Bookmark size={24} className="text-slate-300" />
+               </div>
+               <p className="text-slate-500 text-sm">Belum ada resep yang disimpan.</p>
+             </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // --- 4. DETAIL & COOKING MODE ---
 
